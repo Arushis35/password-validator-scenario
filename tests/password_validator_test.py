@@ -38,3 +38,38 @@ def test_mask_password():
     result = mask_password(password)
 
     assert result == "S*******3"
+
+
+def test_has_special_character():
+    """Test detection of special characters."""
+    assert has_special_character("Secure123!") is True
+    assert has_special_character("Secure123") is False
+
+
+def test_has_special_character_type_error():
+    """Test that non-string input raises TypeError."""
+    with pytest.raises(TypeError):
+        has_special_character(12345678)
+
+
+def test_normalize_password():
+    """Test removal of surrounding whitespace."""
+    assert normalize_password("  Secure123  ") == "Secure123"
+
+
+def test_normalize_password_type_error():
+    """Test that non-string input raises TypeError."""
+    with pytest.raises(TypeError):
+        normalize_password(12345678)
+
+
+@pytest.mark.parametrize("password", ["secure123", "SECURE123", "Secureabc"])
+def test_password_missing_required_character(password):
+    """Test rejection when a required character class is missing."""
+    assert is_valid_password(password) is False
+
+
+def test_mask_invalid_password():
+    """Test that masking an invalid password raises ValueError."""
+    with pytest.raises(ValueError):
+        mask_password("invalid")
